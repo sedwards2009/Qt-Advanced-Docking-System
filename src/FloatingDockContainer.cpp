@@ -641,6 +641,12 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	connect(d->DockContainer, SIGNAL(dockAreasRemoved()), this,
 	    SLOT(onDockAreasAddedOrRemoved()));
 
+	Qt::WindowFlags min_max_button_hint = Qt::WindowMaximizeButtonHint;
+	if (DockManager->testConfigFlag(CDockManager::FloatingContainerIndependent))
+	{
+		min_max_button_hint = Qt::WindowMinMaxButtonsHint;
+	}
+
 #ifdef Q_OS_LINUX
 	QDockWidget::setWidget(d->DockContainer);
 	QDockWidget::setFloating(true);
@@ -688,7 +694,7 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	if (native_window)
 	{
 		setTitleBarWidget(new QWidget());
-		setWindowFlags(Qt::Window | Qt::WindowMaximizeButtonHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
+		setWindowFlags(Qt::Window | min_max_button_hint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
 	}
 	else
 	{
@@ -702,7 +708,7 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	}
 #else
 	setWindowFlags(
-	    Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
+	    Qt::Window | min_max_button_hint | Qt::WindowCloseButtonHint);
 	QBoxLayout *l = new QBoxLayout(QBoxLayout::TopToBottom);
 	l->setContentsMargins(0, 0, 0, 0);
 	l->setSpacing(0);
@@ -1101,7 +1107,7 @@ QList<CDockWidget*> CFloatingDockContainer::dockWidgets() const
 //============================================================================
 void CFloatingDockContainer::hideAndDeleteLater()
 {
-	// Widget has been redocked, so it must be hidden right way (see 
+	// Widget has been redocked, so it must be hidden right way (see
 	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351)
 	// but AutoHideChildren must be set to false because "this" still contains
 	// dock widgets that shall not be toggled hidden.
@@ -1285,8 +1291,11 @@ bool CFloatingDockContainer::isMaximized() const
 void CFloatingDockContainer::show()
 {
 	// Prevent this window from showing in the taskbar and pager (alt+tab)
-	internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_TASKBAR");
-	internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_PAGER");
+	if (!CDockManager::testConfigFlag(CDockManager::FloatingContainerIndependent))
+	{
+		internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_TASKBAR");
+		internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_PAGER");
+	}
 	Super::show();
 }
 
