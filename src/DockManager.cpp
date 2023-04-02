@@ -115,7 +115,8 @@ struct DockManagerPrivate
 	bool RestoringState = false;
 	QVector<CFloatingDockContainer*> UninitializedFloatingWidgets;
 	CDockFocusController* FocusController = nullptr;
-    CDockWidget* CentralWidget = nullptr;
+	CDockWidget* CentralWidget = nullptr;
+	QString StylesheetText;
 
 	/**
 	 * Private data constructor
@@ -170,6 +171,11 @@ struct DockManagerPrivate
 	void loadStylesheet();
 
 	/**
+	 * Load the stylesheet directly into a widget
+	 */
+	void loadStylesheetIntoWidget(QWidget* widget);
+
+	/**
 	 * Adds action to menu - optionally in sorted order
 	 */
 	void addActionToMenu(QAction* Action, QMenu* Menu, bool InsertSorted);
@@ -199,11 +205,15 @@ void DockManagerPrivate::loadStylesheet()
 	QFile StyleSheetFile(FileName);
 	StyleSheetFile.open(QIODevice::ReadOnly);
 	QTextStream StyleSheetStream(&StyleSheetFile);
-	Result = StyleSheetStream.readAll();
+	StylesheetText = StyleSheetStream.readAll();
 	StyleSheetFile.close();
-	_this->setStyleSheet(Result);
+	_this->setStyleSheet(StylesheetText);
 }
 
+void DockManagerPrivate::loadStylesheetIntoWidget(QWidget* widget)
+{
+	widget->setStyleSheet(StylesheetText);
+}
 
 //============================================================================
 bool DockManagerPrivate::restoreContainer(int Index, CDockingStateReader& stream, bool Testing)
@@ -639,6 +649,15 @@ bool CDockManager::eventFilter(QObject *obj, QEvent *e)
 //============================================================================
 void CDockManager::registerFloatingWidget(CFloatingDockContainer* FloatingWidget)
 {
+	if (!testConfigFlag(CDockManager::FloatingContainerIndependent))
+	{
+		FloatingWidget->setParent(this);
+	}
+	else
+	{
+		d->loadStylesheetIntoWidget(FloatingWidget);
+	}
+
 	d->FloatingWidgets.append(FloatingWidget);
 	Q_EMIT floatingWidgetCreated(FloatingWidget);
     ADS_PRINT("d->FloatingWidgets.count() " << d->FloatingWidgets.count());
