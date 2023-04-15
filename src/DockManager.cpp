@@ -58,6 +58,7 @@
 #include "DockAreaTitleBar.h"
 #include "DockFocusController.h"
 #include "DockSplitter.h"
+#include "DockComponentsFactory.h"
 
 #ifdef Q_OS_LINUX
 #include "linux/FloatingWidgetTitleBar.h"
@@ -226,7 +227,7 @@ bool DockManagerPrivate::restoreContainer(int Index, CDockingStateReader& stream
 	bool Result = false;
 	if (Index >= Containers.count())
 	{
-		CFloatingDockContainer* FloatingWidget = new CFloatingDockContainer(_this);
+		CFloatingDockContainer* FloatingWidget = componentsFactory()->createCFloatingDockContainer(_this);
 		Result = FloatingWidget->restoreState(stream, Testing);
 	}
 	else

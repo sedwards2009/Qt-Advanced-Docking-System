@@ -22,6 +22,7 @@
 #include "DockManager.h"
 #include "DockContainerWidget.h"
 #include "DockOverlay.h"
+#include "DockComponentsFactory.h"
 
 namespace ads
 {
@@ -220,11 +221,11 @@ void FloatingDragPreviewPrivate::createFloatingWidget()
 
 	if (DockWidget && DockWidget->features().testFlag(CDockWidget::DockWidgetFloatable))
 	{
-		FloatingWidget = new CFloatingDockContainer(DockWidget);
+		FloatingWidget = componentsFactory()->createCFloatingDockContainer(DockWidget);
 	}
 	else if (DockArea && DockArea->features().testFlag(CDockWidget::DockWidgetFloatable))
 	{
-		FloatingWidget = new CFloatingDockContainer(DockArea);
+		FloatingWidget = componentsFactory()->createCFloatingDockContainer(DockArea);
 	}
 
 	if (FloatingWidget)

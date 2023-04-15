@@ -166,7 +166,7 @@ void DockWidgetPrivate::showDockWidget()
 	
 	if (!DockArea)
 	{
-		CFloatingDockContainer* FloatingWidget = new CFloatingDockContainer(_this);
+		CFloatingDockContainer* FloatingWidget = componentsFactory()->createCFloatingDockContainer(_this);
 		// We use the size hint of the content widget to provide a good
 		// initial size
 		FloatingWidget->resize(Widget ? Widget->sizeHint() : _this->sizeHint());

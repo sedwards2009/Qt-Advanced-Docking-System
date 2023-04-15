@@ -20,7 +20,8 @@ class CDockAreaTabBar;
 class CDockAreaWidget;
 class CDockWidget;
 class CAutoHideTab;
-
+class CFloatingDockContainer;
+class CDockManager;
 
 
 /**
@@ -64,6 +65,24 @@ public:
 	 * new CDockAreaTitleBar(DockArea).
 	 */
 	virtual CDockAreaTitleBar* createDockAreaTitleBar(CDockAreaWidget* DockArea) const;
+
+	/**
+	 * This default implementation just create a floating dock container with
+	 * new CFloatingDockContainer(DockManager).
+	 */
+	virtual CFloatingDockContainer* createCFloatingDockContainer(CDockManager* DockManager) const;
+
+	/**
+	 * This default implementation just create a floating dock container with
+	 * new CFloatingDockContainer(DockArea).
+	 */
+	virtual CFloatingDockContainer* createCFloatingDockContainer(CDockAreaWidget* DockArea) const;
+
+	/**
+	 * This default implementation just create a floating dock container with
+	 * new CFloatingDockContainer(DockWidget).
+	 */
+	virtual CFloatingDockContainer* createCFloatingDockContainer(CDockWidget* DockWidget) const;
 
 	/**
 	 * Returns the default components factory

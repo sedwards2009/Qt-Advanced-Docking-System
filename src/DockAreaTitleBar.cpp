@@ -45,6 +45,7 @@
 #include "FloatingDockContainer.h"
 #include "FloatingDragPreview.h"
 #include "DockAreaWidget.h"
+#include "DockComponentsFactory.h"
 #include "DockOverlay.h"
 #include "DockManager.h"
 #include "DockWidget.h"
@@ -271,7 +272,7 @@ IFloatingWidget* DockAreaTitleBarPrivate::makeAreaFloating(const QPoint& Offset,
         {
             DockArea->autoHideDockContainer()->cleanupAndDelete();
         }
-		FloatingWidget = FloatingDockContainer = new CFloatingDockContainer(DockArea);
+		FloatingWidget = FloatingDockContainer = componentsFactory()->createCFloatingDockContainer(DockArea);
 	}
 	else
 	{

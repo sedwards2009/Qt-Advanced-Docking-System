@@ -52,6 +52,7 @@
 #include "DockManager.h"
 #include "IconProvider.h"
 #include "DockFocusController.h"
+#include "DockComponentsFactory.h"
 
 
 namespace ads
@@ -166,7 +167,7 @@ struct DockWidgetTabPrivate
 	{
 		if (CreateContainer)
 		{
-			return new CFloatingDockContainer(Widget);
+			return componentsFactory()->createCFloatingDockContainer(Widget);
 		}
 		else
 		{
