@@ -799,7 +799,7 @@ CFloatingDockContainer* CDockManager::addDockWidgetFloating(CDockWidget* Dockwid
 	}
 
 	Dockwidget->setDockManager(this);
-	CFloatingDockContainer* FloatingWidget = new CFloatingDockContainer(Dockwidget);
+	CFloatingDockContainer* FloatingWidget = componentsFactory()->createCFloatingDockContainer(Dockwidget);
 	FloatingWidget->resize(Dockwidget->size());
 	if (isVisible())
 	{
