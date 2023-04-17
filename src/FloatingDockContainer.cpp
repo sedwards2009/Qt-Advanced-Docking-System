@@ -364,6 +364,10 @@ static unsigned int zOrderCounter = 0;
 struct FloatingDockContainerPrivate
 {
 	CFloatingDockContainer *_this;
+
+	CDockAreaWidget *InitDockArea;
+	CDockWidget *InitDockWidget;
+
 	CDockContainerWidget *DockContainer;
 	unsigned int zOrderIndex = ++zOrderCounter;
 	QPointer<CDockManager> DockManager;
@@ -484,7 +488,9 @@ struct FloatingDockContainerPrivate
 //============================================================================
 FloatingDockContainerPrivate::FloatingDockContainerPrivate(
     CFloatingDockContainer *_public) :
-	_this(_public)
+	_this(_public),
+	InitDockWidget(nullptr),
+	InitDockArea(nullptr)
 {
 
 }
@@ -635,14 +641,33 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	d(new FloatingDockContainerPrivate(this))
 {
 	d->DockManager = DockManager;
-	d->DockContainer = new CDockContainerWidget(DockManager, this);
+}
+
+//============================================================================
+CFloatingDockContainer::CFloatingDockContainer(CDockAreaWidget *DockArea) :
+	CFloatingDockContainer(DockArea->dockManager())
+{
+	d->InitDockArea = DockArea;
+}
+
+//============================================================================
+CFloatingDockContainer::CFloatingDockContainer(CDockWidget *DockWidget) :
+	CFloatingDockContainer(DockWidget->dockManager())
+{
+	d->InitDockWidget = DockWidget;
+}
+
+//============================================================================
+void CFloatingDockContainer::init()
+{
+	d->DockContainer = new CDockContainerWidget(d->DockManager, this);
 	connect(d->DockContainer, SIGNAL(dockAreasAdded()), this,
 	    SLOT(onDockAreasAddedOrRemoved()));
 	connect(d->DockContainer, SIGNAL(dockAreasRemoved()), this,
 	    SLOT(onDockAreasAddedOrRemoved()));
 
 	Qt::WindowFlags min_max_button_hint = Qt::WindowMaximizeButtonHint;
-	if (DockManager->testConfigFlag(CDockManager::FloatingContainerIndependent))
+	if (d->DockManager->testConfigFlag(CDockManager::FloatingContainerIndependent))
 	{
 		min_max_button_hint = Qt::WindowMinMaxButtonsHint;
 	}
@@ -665,11 +690,11 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	{
 		native_window = false;
 	}
-	else if (DockManager->testConfigFlag(CDockManager::FloatingContainerForceNativeTitleBar))
+	else if (d->DockManager->testConfigFlag(CDockManager::FloatingContainerForceNativeTitleBar))
 	{
 		native_window = true;
 	}
-	else if (DockManager->testConfigFlag(CDockManager::FloatingContainerForceQWidgetTitleBar))
+	else if (d->DockManager->testConfigFlag(CDockManager::FloatingContainerForceQWidgetTitleBar))
 	{
 		native_window = false;
 	}
@@ -716,36 +741,34 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	l->addWidget(d->DockContainer);
 #endif
 
-	DockManager->registerFloatingWidget(this);
-}
+	d->DockManager->registerFloatingWidget(this);
 
-//============================================================================
-CFloatingDockContainer::CFloatingDockContainer(CDockAreaWidget *DockArea) :
-	CFloatingDockContainer(DockArea->dockManager())
-{
-	d->DockContainer->addDockArea(DockArea);
+	if (d->InitDockArea)
+	{
+		d->DockContainer->addDockArea(d->InitDockArea);
 
-    auto TopLevelDockWidget = topLevelDockWidget();
-    if (TopLevelDockWidget)
-    {
-    	TopLevelDockWidget->emitTopLevelChanged(true);
-    }
+		auto TopLevelDockWidget = topLevelDockWidget();
+		if (TopLevelDockWidget)
+		{
+			TopLevelDockWidget->emitTopLevelChanged(true);
+		}
 
-    d->DockManager->notifyWidgetOrAreaRelocation(DockArea);
-}
+		d->DockManager->notifyWidgetOrAreaRelocation(d->InitDockArea);
+		d->InitDockArea = nullptr;
+	}
 
-//============================================================================
-CFloatingDockContainer::CFloatingDockContainer(CDockWidget *DockWidget) :
-	CFloatingDockContainer(DockWidget->dockManager())
-{
-	d->DockContainer->addDockWidget(CenterDockWidgetArea, DockWidget);
-    auto TopLevelDockWidget = topLevelDockWidget();
-    if (TopLevelDockWidget)
-    {
-    	TopLevelDockWidget->emitTopLevelChanged(true);
-    }
+	if (d->InitDockWidget)
+	{
+		d->DockContainer->addDockWidget(CenterDockWidgetArea, d->InitDockWidget);
+		auto TopLevelDockWidget = topLevelDockWidget();
+		if (TopLevelDockWidget)
+		{
+			TopLevelDockWidget->emitTopLevelChanged(true);
+		}
 
-    d->DockManager->notifyWidgetOrAreaRelocation(DockWidget);
+		d->DockManager->notifyWidgetOrAreaRelocation(d->InitDockWidget);
+		d->InitDockWidget = nullptr;
+	}
 }
 
 //============================================================================

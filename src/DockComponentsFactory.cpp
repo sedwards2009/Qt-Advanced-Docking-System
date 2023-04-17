@@ -55,21 +55,27 @@ CDockAreaTitleBar* CDockComponentsFactory::createDockAreaTitleBar(CDockAreaWidge
 //============================================================================
 CFloatingDockContainer* CDockComponentsFactory::createCFloatingDockContainer(CDockManager* DockManager) const
 {
-	return new CFloatingDockContainer(DockManager);
+	CFloatingDockContainer* result = new CFloatingDockContainer(DockManager);
+	result->init();
+	return result;
 }
 
 
 //============================================================================
 CFloatingDockContainer* CDockComponentsFactory::createCFloatingDockContainer(CDockAreaWidget* DockArea) const
 {
-	return new CFloatingDockContainer(DockArea);
+	CFloatingDockContainer* result = new CFloatingDockContainer(DockArea);
+	result->init();
+	return result;
 }
 
 
 //============================================================================
 CFloatingDockContainer* CDockComponentsFactory::createCFloatingDockContainer(CDockWidget* DockWidget) const
 {
-	return new CFloatingDockContainer(DockWidget);
+	CFloatingDockContainer* result = new CFloatingDockContainer(DockWidget);
+	result->init();
+	return result;
 }
 
 

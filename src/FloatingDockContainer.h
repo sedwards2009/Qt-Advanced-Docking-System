@@ -221,6 +221,8 @@ public:
 	 */
 	CFloatingDockContainer(CDockWidget* DockWidget);
 
+	virtual void init();
+
 	/**
 	 * Virtual Destructor
 	 */
