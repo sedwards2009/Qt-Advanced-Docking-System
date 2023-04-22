@@ -60,6 +60,7 @@ private:
 	friend class CDockManager;
 	friend class CAutoHideDockContainer;
 	void onDockWidgetFeaturesChanged();
+	void updateTitleLabel();
 
 private Q_SLOTS:
 	void detachDockWidget();
@@ -78,6 +79,16 @@ protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 public:
+
+	enum DockWidgetTabFeature
+	{
+		DockWidgetTabContextMenu = 0x1,///< Show context menu
+		DockWidgetTabTitle = 0x2,///< Show the tab label text
+		DefaultDockWidgetTabFeatures = DockWidgetTabContextMenu | DockWidgetTabTitle,
+		NoDockWidgetTabFeatures = 0x0
+	};
+	Q_DECLARE_FLAGS(DockWidgetTabFeatures, DockWidgetTabFeature)
+
 	using Super = QFrame;
 	/**
 	 * Default Constructor
@@ -177,6 +188,10 @@ public:
 	 * depending on the style
 	 */
 	void setIconSize(const QSize& Size);
+
+	void setFeatures(DockWidgetTabFeatures features);
+	void setFeature(DockWidgetTabFeature flag, bool on);
+	DockWidgetTabFeatures features() const;
 
 public Q_SLOTS:
 	virtual void setVisible(bool visible) override;

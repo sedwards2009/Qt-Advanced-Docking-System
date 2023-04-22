@@ -66,6 +66,7 @@ using tTabLabel = CElidingLabel;
 struct DockWidgetTabPrivate
 {
 	CDockWidgetTab* _this;
+	CDockWidgetTab::DockWidgetTabFeatures Features = CDockWidgetTab::DefaultDockWidgetTabFeatures;
 	CDockWidget* DockWidget;
 	QLabel* IconLabel = nullptr;
 	tTabLabel* TitleLabel;
@@ -90,6 +91,8 @@ struct DockWidgetTabPrivate
 	 * Creates the complete layout including all controls
 	 */
 	void createLayout();
+
+	void updateTitleLabel();
 
 	/**
 	 * Moves the tab depending on the position in the given mouse event
@@ -276,7 +279,13 @@ void DockWidgetTabPrivate::createLayout()
 	Layout->addSpacing(qRound(Spacing * 4.0 / 3.0));
 	Layout->setAlignment(Qt::AlignCenter);
 
-	TitleLabel->setVisible(true);
+	updateTitleLabel();
+}
+
+//============================================================================
+void DockWidgetTabPrivate::updateTitleLabel()
+{
+	TitleLabel->setVisible(Features.testFlag(CDockWidgetTab::DockWidgetTabTitle));
 }
 
 //============================================================================
@@ -511,6 +520,12 @@ void CDockWidgetTab::mouseMoveEvent(QMouseEvent* ev)
 //============================================================================
 void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 {
+	if (!d->Features.testFlag(CDockWidgetTab::DockWidgetTabContextMenu))
+	{
+		Super::contextMenuEvent(ev);
+		return;
+	}
+
 	ev->accept();
 	if (d->isDraggingState(DraggingFloatingWidget))
 	{
@@ -803,6 +818,32 @@ void CDockWidgetTab::setIconSize(const QSize& Size)
 	d->IconSize = Size;
 	d->updateIcon();
 }
+
+//============================================================================
+void CDockWidgetTab::setFeature(DockWidgetTabFeature flag, bool on)
+{
+	auto Features = features();
+	internal::setFlag(Features, flag, on);
+	setFeatures(Features);
+}
+
+//============================================================================
+void CDockWidgetTab::setFeatures(DockWidgetTabFeatures features)
+{
+	if (d->Features == features)
+	{
+		return;
+	}
+	d->Features = features;
+	d->updateTitleLabel();
+}
+
+//============================================================================
+CDockWidgetTab::DockWidgetTabFeatures CDockWidgetTab::features() const
+{
+	return d->Features;
+}
+
 } // namespace ads
 //---------------------------------------------------------------------------
 // EOF DockWidgetTab.cpp
