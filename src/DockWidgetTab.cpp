@@ -520,6 +520,14 @@ void CDockWidgetTab::mouseMoveEvent(QMouseEvent* ev)
 //============================================================================
 void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 {
+	if (d->isDraggingState(DraggingFloatingWidget))
+	{
+		ev->accept();
+		return;
+	}
+
+	d->saveDragStartMousePosition(ev->globalPos());
+
 	if (!d->Features.testFlag(CDockWidgetTab::DockWidgetTabContextMenu))
 	{
 		Super::contextMenuEvent(ev);
@@ -527,13 +535,6 @@ void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 	}
 
 	ev->accept();
-	if (d->isDraggingState(DraggingFloatingWidget))
-	{
-		return;
-	}
-
-	d->saveDragStartMousePosition(ev->globalPos());
-
     const bool isFloatable = d->DockWidget->features().testFlag(CDockWidget::DockWidgetFloatable);
     const bool isNotOnlyTabInContainer =  !d->DockArea->dockContainer()->hasTopLevelDockWidget();
     const bool isTopLevelArea = d->DockArea->isTopLevelArea();
