@@ -1246,6 +1246,13 @@ void CDockManager::notifyFloatingWidgetDrop(CFloatingDockContainer* FloatingWidg
 
 
 //===========================================================================
+void CDockManager::notifyFloatingWidgetDelete(CFloatingDockContainer* FloatingWidget)
+{
+	Q_EMIT this->floatingWidgetAboutToBeRemoved(FloatingWidget);
+}
+
+
+//===========================================================================
 void CDockManager::setDockWidgetFocused(CDockWidget* DockWidget)
 {
 	if (d->FocusController)

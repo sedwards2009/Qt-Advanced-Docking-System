@@ -139,6 +139,11 @@ protected:
 	void notifyFloatingWidgetDrop(CFloatingDockContainer* FloatingWidget);
 
 	/**
+	 * This method must be called just before destroying a floating widget.
+	 */
+	void notifyFloatingWidgetDelete(CFloatingDockContainer* FloatingWidget);
+
+	/**
 	 * Show the floating widgets that has been created floating
 	 */
 	virtual void showEvent(QShowEvent *event) override;
@@ -681,6 +686,11 @@ Q_SIGNALS:
 	 * the newly created window.
 	 */
 	void floatingWidgetCreated(ads::CFloatingDockContainer* FloatingWidget);
+
+	/**
+	 * This signal is emitted just before a floating widget is destroyed.
+	 */
+	void floatingWidgetAboutToBeRemoved(ads::CFloatingDockContainer* FloatingWidget);
 
     /**
      * This signal is emitted, if a new DockArea has been created.

@@ -1136,6 +1136,7 @@ void CFloatingDockContainer::hideAndDeleteLater()
 	// dock widgets that shall not be toggled hidden.
 	d->AutoHideChildren = false;
 	hide();
+	d->DockManager->notifyFloatingWidgetDelete(this);
 	deleteLater();
 }
 
