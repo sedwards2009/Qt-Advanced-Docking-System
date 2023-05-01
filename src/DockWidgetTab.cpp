@@ -66,7 +66,6 @@ using tTabLabel = CElidingLabel;
 struct DockWidgetTabPrivate
 {
 	CDockWidgetTab* _this;
-	CDockWidgetTab::DockWidgetTabFeatures Features = CDockWidgetTab::DefaultDockWidgetTabFeatures;
 	CDockWidget* DockWidget;
 	QLabel* IconLabel = nullptr;
 	tTabLabel* TitleLabel;
@@ -285,7 +284,7 @@ void DockWidgetTabPrivate::createLayout()
 //============================================================================
 void DockWidgetTabPrivate::updateTitleLabel()
 {
-	TitleLabel->setVisible(Features.testFlag(CDockWidgetTab::DockWidgetTabTitle));
+	TitleLabel->setVisible(CDockManager::testConfigFlag(CDockManager::DockWidgetTabTitle));
 }
 
 //============================================================================
@@ -528,7 +527,7 @@ void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 
 	d->saveDragStartMousePosition(ev->globalPos());
 
-	if (!d->Features.testFlag(CDockWidgetTab::DockWidgetTabContextMenu))
+	if (!CDockManager::testConfigFlag(CDockManager::DockWidgetTabContextMenu))
 	{
 		Super::contextMenuEvent(ev);
 		return;
@@ -818,31 +817,6 @@ void CDockWidgetTab::setIconSize(const QSize& Size)
 {
 	d->IconSize = Size;
 	d->updateIcon();
-}
-
-//============================================================================
-void CDockWidgetTab::setFeature(DockWidgetTabFeature flag, bool on)
-{
-	auto Features = features();
-	internal::setFlag(Features, flag, on);
-	setFeatures(Features);
-}
-
-//============================================================================
-void CDockWidgetTab::setFeatures(DockWidgetTabFeatures features)
-{
-	if (d->Features == features)
-	{
-		return;
-	}
-	d->Features = features;
-	d->updateTitleLabel();
-}
-
-//============================================================================
-CDockWidgetTab::DockWidgetTabFeatures CDockWidgetTab::features() const
-{
-	return d->Features;
 }
 
 } // namespace ads

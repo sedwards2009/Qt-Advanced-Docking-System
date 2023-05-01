@@ -211,6 +211,9 @@ public:
 
 		FloatingContainerIndependent = 0x4000000,	//! Treat floating containers as independent windows
 
+		DockWidgetTabContextMenu = 0x8000000,	//! Show context menu on tabs
+		DockWidgetTabTitle = 0x10000000,		//! Show the tab label text
+
         DefaultDockAreaButtons = DockAreaHasCloseButton
 							   | DockAreaHasUndockButton
 		                       | DockAreaHasTabsMenuButton, ///< default configuration of dock area title bar buttons
@@ -218,7 +221,9 @@ public:
 		DefaultBaseConfig = DefaultDockAreaButtons
 		                  | ActiveTabHasCloseButton
 		                  | XmlCompressionEnabled
-		                  | FloatingContainerHasWidgetTitle, ///< default base configuration settings
+		                  | FloatingContainerHasWidgetTitle
+						  | DockWidgetTabContextMenu
+						  | DockWidgetTabTitle, ///< default base configuration settings
 
         DefaultOpaqueConfig = DefaultBaseConfig
 		                    | OpaqueSplitterResize
