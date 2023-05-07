@@ -211,6 +211,7 @@ void DockManagerPrivate::loadStylesheet()
 	_this->setStyleSheet(StylesheetText);
 }
 
+//============================================================================
 void DockManagerPrivate::loadStylesheetIntoWidget(QWidget* widget)
 {
 	widget->setStyleSheet(StylesheetText);
@@ -646,6 +647,14 @@ bool CDockManager::eventFilter(QObject *obj, QEvent *e)
 	return Super::eventFilter(obj, e);
 }
 #endif
+
+//============================================================================
+void CDockManager::setStyleSheet(const QString& styleSheet)
+{
+	d->StylesheetText = styleSheet;
+	QWidget::setStyleSheet(styleSheet);
+}
+
 
 //============================================================================
 void CDockManager::registerFloatingWidget(CFloatingDockContainer* FloatingWidget)

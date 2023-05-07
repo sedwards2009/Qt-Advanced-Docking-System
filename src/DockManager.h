@@ -618,6 +618,8 @@ public:
 	 */
 	static QString floatingContainersTitle();
 
+	void setStyleSheet(const QString& styleSheet);
+
 public Q_SLOTS:
 	/**
 	 * Opens the perspective with the given name.
