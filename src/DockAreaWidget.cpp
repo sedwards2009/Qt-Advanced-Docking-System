@@ -555,8 +555,7 @@ void CDockAreaWidget::removeDockWidget(CDockWidget* DockWidget)
 		{
 			if(CFloatingDockContainer*  FloatingDockContainer = DockContainer->floatingWidget())
 			{
-				FloatingDockContainer->hide();
-				FloatingDockContainer->deleteLater();
+				FloatingDockContainer->hideAndDeleteLater();
 			}
 		}
 	}
