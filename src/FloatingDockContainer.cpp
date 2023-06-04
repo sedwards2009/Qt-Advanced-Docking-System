@@ -368,6 +368,8 @@ struct FloatingDockContainerPrivate
 	CDockAreaWidget *InitDockArea;
 	CDockWidget *InitDockWidget;
 
+	CDockWidget *focusedDockWidget = nullptr;
+
 	CDockContainerWidget *DockContainer;
 	unsigned int zOrderIndex = ++zOrderCounter;
 	QPointer<CDockManager> DockManager;
@@ -783,6 +785,23 @@ CFloatingDockContainer::~CFloatingDockContainer()
 }
 
 //============================================================================
+void CFloatingDockContainer::setFocusedDockWidget(CDockWidget* dockWidget)
+{
+	ADS_PRINT("CFloatingDockContainer::setFocusedDockWidget()" << dockWidget);
+	d->focusedDockWidget = dockWidget;
+	if (dockWidget)
+	{
+		d->reflectCurrentWidget(dockWidget);
+	}
+}
+
+//============================================================================
+CDockWidget* CFloatingDockContainer::getFocusedDockWidget() const
+{
+	return d->focusedDockWidget;
+}
+
+//============================================================================
 CDockContainerWidget* CFloatingDockContainer::dockContainer() const
 {
 	return d->DockContainer;
@@ -1074,12 +1093,17 @@ void CFloatingDockContainer::updateWindowTitle()
 		{
 			d->reflectCurrentWidget(CurrentWidget);
 		}
+		return;
 	}
-	else
+
+	if (d->focusedDockWidget)
 	{
-		d->setWindowTitle(d->floatingContainersTitle());
-		setWindowIcon(QApplication::windowIcon());
+		d->reflectCurrentWidget(d->focusedDockWidget);
+		return;
 	}
+
+	d->setWindowTitle(d->floatingContainersTitle());
+	setWindowIcon(QApplication::windowIcon());
 }
 
 //============================================================================

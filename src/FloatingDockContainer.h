@@ -104,6 +104,11 @@ public:
 class ADS_EXPORT CFloatingDockContainer : public tFloatingWidgetBase, public IFloatingWidget
 {
 	Q_OBJECT
+public:
+	Q_PROPERTY(CDockWidget* FocusedDockWidget READ getFocusedDockWidget WRITE setFocusedDockWidget)
+	void setFocusedDockWidget(CDockWidget *dockWidget);
+	CDockWidget *getFocusedDockWidget() const;
+
 private:
 	FloatingDockContainerPrivate* d; ///< private data (pimpl)
 	friend struct FloatingDockContainerPrivate;

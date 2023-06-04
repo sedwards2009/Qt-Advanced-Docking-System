@@ -164,7 +164,7 @@ void DockFocusControllerPrivate::updateDockWidgetFocus(CDockWidget* DockWidget)
 
     if (NewFloatingWidget)
     {
-        NewFloatingWidget->setProperty(FocusedDockWidgetProperty, QVariant::fromValue(QPointer<CDockWidget>(DockWidget)));
+        NewFloatingWidget->setProperty(FocusedDockWidgetProperty, QVariant::fromValue(DockWidget));
     }
 
 
