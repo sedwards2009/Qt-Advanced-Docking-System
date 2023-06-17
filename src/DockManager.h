@@ -706,6 +706,12 @@ Q_SIGNALS:
      */
     void dockAreaCreated(ads::CDockAreaWidget* DockArea);
 
+	/**
+	 * This signal is emitted just before a DockArea is removed and
+	 * deleted.
+	 */
+	void dockAreaAboutToBeRemoved(ads::CDockAreaWidget* DockArea);
+
     /**
      * This signal is emitted if a dock widget has been added to this
      * dock manager instance.

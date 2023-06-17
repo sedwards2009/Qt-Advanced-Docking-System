@@ -1487,6 +1487,9 @@ void CDockContainerWidget::addDockArea(CDockAreaWidget* DockAreaWidget,
 void CDockContainerWidget::removeDockArea(CDockAreaWidget* area)
 {
     ADS_PRINT("CDockContainerWidget::removeDockArea");
+
+	Q_EMIT d->DockManager->dockAreaAboutToBeRemoved(area);
+
     // If it is an auto hide area, then there is nothing much to do
 	if (area->isAutoHide())
 	{
