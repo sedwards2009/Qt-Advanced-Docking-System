@@ -263,7 +263,7 @@ CFloatingDragPreview::CFloatingDragPreview(QWidget* Content, QWidget* parent) :
 		setAttribute(Qt::WA_TranslucentBackground);
 	}
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
     auto Flags = windowFlags();
     Flags |= Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint;
     setWindowFlags(Flags);
@@ -352,11 +352,10 @@ void CFloatingDragPreview::finishDragging()
 	auto DockDropArea = d->DockManager->dockAreaOverlay()->visibleDropAreaUnderCursor();
 	auto ContainerDropArea = d->DockManager->containerOverlay()->visibleDropAreaUnderCursor();
 	bool ValidDropArea = (DockDropArea != InvalidDockWidgetArea)  || (ContainerDropArea != InvalidDockWidgetArea);
-	bool FloatingRequested = !d->DropContainer && !ValidDropArea;
 
 	// Non floatable auto hide widgets should stay in its current auto hide
 	// state if they are dragged into a floating window
-	if (!FloatingRequested || d->isContentFloatable())
+	if (ValidDropArea || d->isContentFloatable())
 	{
 		cleanupAutoHideContainerWidget();
 	}
