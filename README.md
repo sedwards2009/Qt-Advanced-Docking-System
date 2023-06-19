@@ -119,6 +119,8 @@ know it from Visual Studio.
   - [RDE – Robox Development Environment](#rde--robox-development-environment)
   - [ResInsight](#resinsight)
   - [ADTF 3](#adtf-3)
+  - [DREAM.3D NX](#dream3d-nx)
+  - [LabPlot](#labplot)
 - [Alternative Docking System Implementations](#alternative-docking-system-implementations)
   - [KDDockWidgets](#kddockwidgets)
   - [QtitanDocking](#qtitandocking)
@@ -254,7 +256,7 @@ The PySide6 bindings were contributed by:
 
 - [mborgerson](https://github.com/mborgerson)
 
-For more information about the PySide6 bindings read [this](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/298) issue.
+Please file PySide6-QtAds-specific issues on its [pyside6_qtads](https://github.com/mborgerson/pyside6_qtads) fork for tracking. For more information about the PySide6 bindings read [this](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/298) issue.
 
 ### PyQt5
 
@@ -593,13 +595,33 @@ says about the switch to Qt Advanced Docking:
 
 ![ADTF](doc/showcase_adtf.png)
 
+### [DREAM.3D NX](https://github.com/BlueQuartzSoftware/DREAM3D)
+
+DREAM.3D *(Digital Representation Environment for Analysis of Materials in 3D)* is an open source, cross-platform and modular, software suite that allows users to prepare, reconstruct, quantify, instantiate, and mesh, multidimensional, multimodal microstructural data, as well as many other applications.
+
+[BlueQuartz Software](http://www.bluequartz.net/) is currently completely rewriting the DREAM.3D application. For the upcoming version **[DREAM3D NX](http://www.dream3d.io/)** they improved the UI by using the Advanced Docking System. An [early version](http://www.dream3d.io/) of **DREAM3D NX** with ADS is already available to any user who would like to take the brand new version out for a spin.
+
+![DREAM.3D NX](doc/showcase_dream3d_nx.png)
+
+[read more...](http://dream3d.bluequartz.net/)
+
+### [LabPlot](https://labplot.kde.org/)
+
+KDE LabPlot is the ultimate free, open source and cross-platform tool for scientists, engineers, and students who need to analyze and visualize data. With its intuitive interface and powerful features, you can create stunning plots and diagrams with ease. Whether you're working with CSV, FITS, or HDF5 data, KDE LabPlot makes it simple to import and analyze your data.
+
+The LabPlot project recently switched to the Qt Advanced Docking System for their user interface. This switch represents a significant improvement to the LabPlot software, allowing users to create and manage complex data visualization layouts with ease.
+
+![LabPlot](doc/showcase_labplot.png)
+
+[read more...](https://labplot.kde.org/)
+
 ## Alternative Docking System Implementations
 
 If this Qt Advanced Docking System does not fit to your needs you may consider some of the alternative docking system solutions for Qt.
 
 ### KDDockWidgets
 
-This is an advanced docking framework for Qt from [KDAB](https://www.kdab.com/). The interesting thing is, that they separated GUI code from logic, so they can easily provide a QtQuick backend in the future. 
+This is an advanced docking framework for Qt from [KDAB](https://www.kdab.com/). The interesting thing is, that they separated GUI code from logic, so they can easily provide a QtQuick backend in the future.
 
 - [Blog post about KDDockWidgets](https://www.kdab.com/kddockwidgets/)
 - [GitHub project](https://github.com/KDAB/KDDockWidgets)
