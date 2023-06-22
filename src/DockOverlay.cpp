@@ -446,6 +446,7 @@ DockWidgetArea CDockOverlay::showOverlay(QWidget* target)
 void CDockOverlay::hideOverlay()
 {
 	hide();
+	resize(QSize(0, 0));
 	d->TargetWidget.clear();
 	d->LastLocation = InvalidDockWidgetArea;
 	d->DropAreaRect = QRect();
