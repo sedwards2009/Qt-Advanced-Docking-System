@@ -830,6 +830,7 @@ void CFloatingDockContainer::changeEvent(QEvent *event)
 		break;
 
 	case QEvent::WindowStateChange:
+		ADS_PRINT("FloatingWidget::changeEvent QEvent::WindowStateChange ");
 	    // If the DockManager window is restored from minimized on Windows
 		// then the FloatingWidgets are not properly restored to maximized but
 		// to normal state.
@@ -1006,6 +1007,8 @@ void CFloatingDockContainer::showEvent(QShowEvent *event)
 void CFloatingDockContainer::startFloating(const QPoint &DragStartMousePos,
     const QSize &Size, eDragState DragState, QWidget *MouseEventHandler)
 {
+	ADS_PRINT("CFloatingDockContainer::startFloating()");
+
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
     if (!isMaximized())
     {
@@ -1040,6 +1043,7 @@ void CFloatingDockContainer::startFloating(const QPoint &DragStartMousePos,
 //============================================================================
 void CFloatingDockContainer::moveFloating()
 {
+	ADS_PRINT("CFloatingDockContainer::moveFloating()");
 	int BorderSize = (frameSize().width() - size().width()) / 2;
 	const QPoint moveToPos = QCursor::pos() - d->DragStartMousePosition
 	    - QPoint(BorderSize, 0);
@@ -1231,7 +1235,7 @@ bool CFloatingDockContainer::event(QEvent *e)
 		if (e->type() == QEvent::NonClientAreaMouseButtonPress && QGuiApplication::mouseButtons().testFlag(Qt::LeftButton))
 #endif
 		{
-			ADS_PRINT("FloatingWidget::event Event::NonClientAreaMouseButtonPress" << e->type());
+			ADS_PRINT("CFloatingDockContainer::event Event::NonClientAreaMouseButtonPress" << e->type());
 			d->DragStartPos = pos();
 			d->setState(DraggingMousePressed);
 		}
@@ -1242,11 +1246,12 @@ bool CFloatingDockContainer::event(QEvent *e)
 		switch (e->type())
 		{
 		case QEvent::NonClientAreaMouseButtonDblClick:
-			ADS_PRINT("FloatingWidget::event QEvent::NonClientAreaMouseButtonDblClick");
+			ADS_PRINT("CFloatingDockContainer::event QEvent::NonClientAreaMouseButtonDblClick");
 			d->setState(DraggingInactive);
 			break;
 
 		case QEvent::Resize:
+			ADS_PRINT("CFloatingDockContainer::event() QEvent::Resize");
 			// If the first event after the mouse press is a resize event, then
 			// the user resizes the window instead of dragging it around.
 			// But there is one exception. If the window is maximized,
@@ -1269,7 +1274,7 @@ bool CFloatingDockContainer::event(QEvent *e)
 	case DraggingFloatingWidget:
 		if (e->type() == QEvent::NonClientAreaMouseButtonRelease)
 		{
-			ADS_PRINT("FloatingWidget::event QEvent::NonClientAreaMouseButtonRelease");
+			ADS_PRINT("CFloatingDockContainer::event QEvent::NonClientAreaMouseButtonRelease");
 			d->titleMouseReleaseEvent();
 		}
 		break;
@@ -1288,6 +1293,7 @@ bool CFloatingDockContainer::event(QEvent *e)
 //============================================================================
 void CFloatingDockContainer::moveEvent(QMoveEvent *event)
 {
+	ADS_PRINT("CFloatingDockContainer::moveEvent()");
 	QWidget::moveEvent(event);
 	switch (d->DraggingState)
 	{
@@ -1331,6 +1337,7 @@ void CFloatingDockContainer::onMaximizeRequest()
 //============================================================================
 void CFloatingDockContainer::showNormal(bool fixGeometry)
 {
+	ADS_PRINT("CFloatingDockContainer::showNormal()");
 	if (windowState() == Qt::WindowMaximized)
 	{
 		QRect oldNormal = normalGeometry();
@@ -1350,6 +1357,7 @@ void CFloatingDockContainer::showNormal(bool fixGeometry)
 //============================================================================
 void CFloatingDockContainer::showMaximized()
 {
+	ADS_PRINT("CFloatingDockContainer::showMaximized()");
 	Super::showMaximized();
 	if (d->TitleBar)
 	{
@@ -1381,6 +1389,7 @@ void CFloatingDockContainer::show()
 //============================================================================
 void CFloatingDockContainer::resizeEvent(QResizeEvent *event)
 {
+	ADS_PRINT("CFloatingDockContainer::resizeEvent()");
 	d->IsResizing = true;
 	Super::resizeEvent(event);
 }
@@ -1389,6 +1398,7 @@ static bool s_mousePressed = false;
 //============================================================================
 void CFloatingDockContainer::moveEvent(QMoveEvent *event)
 {
+	ADS_PRINT("CFloatingDockContainer::moveEvent()");
 	Super::moveEvent(event);
 	if (!d->IsResizing && event->spontaneous() && s_mousePressed)
 	{
@@ -1406,9 +1416,11 @@ bool CFloatingDockContainer::event(QEvent *e)
 	switch (e->type())
 	{
 	case QEvent::WindowActivate:
+		ADS_PRINT("CFloatingDockContainer::event QEvent::WindowActivate");
 		s_mousePressed = false;
 		break;
 	case QEvent::WindowDeactivate:
+		ADS_PRINT("CFloatingDockContainer::event QEvent::WindowDeactivate");
 		s_mousePressed = true;
 		break;
 	default:
