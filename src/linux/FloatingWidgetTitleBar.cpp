@@ -36,6 +36,7 @@
 #include <QPixmap>
 #include <QStyle>
 #include <QMouseEvent>
+#include <QWindow>
 
 #include "ads_globals.h"
 #include "ElidingLabel.h"
@@ -59,7 +60,6 @@ struct FloatingWidgetTitleBarPrivate
 	tCloseButton *CloseButton = nullptr;
     tMaximizeButton* MaximizeButton = nullptr;
 	CFloatingDockContainer *FloatingWidget = nullptr;
-	eDragState DragState = DraggingInactive;
     QIcon MaximizeIcon;
     QIcon NormalIcon;
     bool Maximized = false;
@@ -158,58 +158,17 @@ void CFloatingWidgetTitleBar::mousePressEvent(QMouseEvent *ev)
 {
 	if (ev->button() == Qt::LeftButton)
 	{
-		d->DragState = DraggingFloatingWidget;
-		d->FloatingWidget->startDragging(ev->pos(), d->FloatingWidget->size(),
-		    this);
+		d->FloatingWidget->window()->windowHandle()->startSystemMove();
 		return;
 	}
 	Super::mousePressEvent(ev);
 }
-
-
-//============================================================================
-void CFloatingWidgetTitleBar::mouseReleaseEvent(QMouseEvent *ev)
-{
-	d->DragState = DraggingInactive;
-    if (d->FloatingWidget)
-    {
-		d->FloatingWidget->finishDragging();
-    }
-	Super::mouseReleaseEvent(ev);
-}
-
-
-//============================================================================
-void CFloatingWidgetTitleBar::mouseMoveEvent(QMouseEvent *ev)
-{
-	if (!(ev->buttons() & Qt::LeftButton) || DraggingInactive == d->DragState)
-	{
-		d->DragState = DraggingInactive;
-		Super::mouseMoveEvent(ev);
-		return;
-	}
-
-	// move floating window
-	if (DraggingFloatingWidget == d->DragState)
-	{
-		if(d->FloatingWidget->isMaximized())
-		{
-			d->FloatingWidget->showNormal(true);
-		}
-		d->FloatingWidget->moveFloating();
-		Super::mouseMoveEvent(ev);
-		return;
-	}
-	Super::mouseMoveEvent(ev);
-}
-
 
 //============================================================================
 void CFloatingWidgetTitleBar::enableCloseButton(bool Enable)
 {
 	d->CloseButton->setEnabled(Enable);
 }
-
 
 //============================================================================
 void CFloatingWidgetTitleBar::setTitle(const QString &Text)
@@ -222,7 +181,6 @@ void CFloatingWidgetTitleBar::updateStyle()
 {
     internal::repolishStyle(this, internal::RepolishDirectChildren);
 }
-
 
 //============================================================================
 void CFloatingWidgetTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
@@ -238,7 +196,6 @@ void CFloatingWidgetTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
     }
 }
 
-
 //============================================================================
 void CFloatingWidgetTitleBar::setMaximizedIcon(bool maximized)
 {
@@ -253,7 +210,6 @@ void CFloatingWidgetTitleBar::setMaximizedIcon(bool maximized)
     }
 }
 
-
 //============================================================================
 void CFloatingWidgetTitleBar::setMaximizeIcon(const QIcon& Icon)
 {
@@ -263,7 +219,6 @@ void CFloatingWidgetTitleBar::setMaximizeIcon(const QIcon& Icon)
         setMaximizedIcon(d->Maximized);
     }
 }
-
 
 //============================================================================
 void CFloatingWidgetTitleBar::setNormalIcon(const QIcon& Icon)
@@ -275,19 +230,16 @@ void CFloatingWidgetTitleBar::setNormalIcon(const QIcon& Icon)
     }
 }
 
-
 //============================================================================
 QIcon CFloatingWidgetTitleBar::maximizeIcon() const
 {
     return d->MaximizeIcon;
 }
 
-
 //============================================================================
 QIcon CFloatingWidgetTitleBar::normalIcon() const
 {
     return d->NormalIcon;
 }
-
 
 } // namespace ads
