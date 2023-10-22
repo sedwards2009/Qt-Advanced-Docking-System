@@ -276,6 +276,11 @@ public:
      */
     void onMaximizeRequest();
 
+    /**
+	 * This is a function that responds to FloatingWidgetTitleBar::minimizeRequest()
+     */
+    void onMinimizeRequest();
+
 	/**
 	 * Normalize (Unmaximize) the window.
 	 *	fixGeometry parameter fixes a "bug" in QT where immediately after calling showNormal

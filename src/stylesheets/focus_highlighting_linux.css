@@ -168,6 +168,7 @@ QScrollArea#dockWidgetScrollArea {
  * Floating widget styling
  *****************************************************************************/
 ads--CFloatingWidgetTitleBar {
+    qproperty-minimizeIcon: url(:/ads/images/minimize-button.svg);
     qproperty-maximizeIcon: url(:/ads/images/maximize-button.svg);
     qproperty-normalIcon: url(:/ads/images/restore-button.svg);
 }
@@ -185,7 +186,7 @@ ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleLabel {
 }
 */
 
-#floatingTitleCloseButton, #floatingTitleMaximizeButton {
+#floatingTitleCloseButton, #floatingTitleMaximizeButton, #floatingTitleMinimizeButton {
    qproperty-iconSize: 16px;
    border: none;
    margin: 6px 3px 6px 3px;
@@ -197,13 +198,13 @@ ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleLabel {
 }
 
 
-#floatingTitleCloseButton:hover, #floatingTitleMaximizeButton:hover {
+#floatingTitleCloseButton:hover, #floatingTitleMaximizeButton:hover, #floatingTitleMinimizeButton:hover {
     background: rgba(0, 0, 0, 24);
     border: none;
 }
 
 
-#floatingTitleCloseButton:pressed, #floatingTitleMaximizeButton:pressed {
+#floatingTitleCloseButton:pressed, #floatingTitleMaximizeButton:pressed, #floatingTitleMinimizeButton:pressed {
     background: rgba(0, 0, 0, 48);
 }
 
@@ -212,6 +213,9 @@ ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleMaximizeButton 
     qproperty-iconSize: 16px;
 }
 
+ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleMinimizeButton {
+    qproperty-iconSize: 16px;
+}
 
 /* does not properly work on KDE
 ads--CFloatingDockContainer[isActiveWindow="true"] #floatingTitleCloseButton {

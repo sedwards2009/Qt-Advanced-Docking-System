@@ -732,6 +732,8 @@ void CFloatingDockContainer::init()
 		connect(d->TitleBar, SIGNAL(closeRequested()), SLOT(close()));
 		connect(d->TitleBar, &CFloatingWidgetTitleBar::maximizeRequested,
 				this, &CFloatingDockContainer::onMaximizeRequest);
+		connect(d->TitleBar, &CFloatingWidgetTitleBar::minimizeRequested,
+				this, &CFloatingDockContainer::onMinimizeRequest);
 	}
 #else
 	setWindowFlags(
@@ -1333,6 +1335,11 @@ void CFloatingDockContainer::onMaximizeRequest()
 	}
 }
 
+//============================================================================
+void CFloatingDockContainer::onMinimizeRequest()
+{
+	showMinimized();
+}
 
 //============================================================================
 void CFloatingDockContainer::showNormal(bool fixGeometry)

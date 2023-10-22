@@ -130,12 +130,13 @@ QScrollArea#dockWidgetScrollArea {
  *****************************************************************************/
 ads--CFloatingWidgetTitleBar {
     background: palette(midlight);
+    qproperty-minimizeIcon: url(:/ads/images/minimize-button.svg);
     qproperty-maximizeIcon: url(:/ads/images/maximize-button.svg);
     qproperty-normalIcon: url(:/ads/images/restore-button.svg);
 }
 
 
-#floatingTitleCloseButton, #floatingTitleMaximizeButton {
+#floatingTitleCloseButton, #floatingTitleMaximizeButton, #floatingTitleMinimizeButton {
    qproperty-iconSize: 16px;
    border: none;
    margin: 3px;

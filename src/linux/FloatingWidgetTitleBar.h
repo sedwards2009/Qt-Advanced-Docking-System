@@ -49,6 +49,7 @@ struct FloatingWidgetTitleBarPrivate;
 class CFloatingWidgetTitleBar : public QFrame
 {
 	Q_OBJECT
+    Q_PROPERTY(QIcon minimizeIcon READ minimizeIcon WRITE setMinimizeIcon)
     Q_PROPERTY(QIcon maximizeIcon READ maximizeIcon WRITE setMaximizeIcon)
     Q_PROPERTY(QIcon normalIcon READ normalIcon WRITE setNormalIcon)
 private:
@@ -58,6 +59,8 @@ protected:
 	virtual void mousePressEvent(QMouseEvent *ev) override;
     virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 
+    void setMinimizeIcon(const QIcon& Icon);
+    QIcon minimizeIcon() const;
     void setMaximizeIcon(const QIcon& Icon);
     QIcon maximizeIcon() const;
     void setNormalIcon(const QIcon& Icon);
@@ -102,6 +105,11 @@ signals:
     * This signal is emitted, if the maximize button is clicked.
     */
     void maximizeRequested();
+
+		/**
+		* This signal is emitted when the minimize button is clicked.
+		*/
+		void minimizeRequested();
 };
 } // namespace ads
 #endif // FLOATINGWIDGETTITLEBAR_H

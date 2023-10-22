@@ -46,8 +46,9 @@ namespace ads
 {
 
 using tTabLabel = CElidingLabel;
-using tCloseButton = QToolButton;
-using tMaximizeButton  = QToolButton;
+using tCloseButton = QPushButton;
+using tMaximizeButton  = QPushButton;
+using tMinimizeButton = QPushButton;
 
 /**
  * @brief Private data class of public interface CFloatingWidgetTitleBar
@@ -58,8 +59,10 @@ struct FloatingWidgetTitleBarPrivate
 	QLabel *IconLabel = nullptr;
 	tTabLabel *TitleLabel;
 	tCloseButton *CloseButton = nullptr;
+    tMinimizeButton* MinimizeButton = nullptr;
     tMaximizeButton* MaximizeButton = nullptr;
 	CFloatingDockContainer *FloatingWidget = nullptr;
+    QIcon MinimizeIcon;
     QIcon MaximizeIcon;
     QIcon NormalIcon;
     bool Maximized = false;
@@ -86,11 +89,12 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 
 	CloseButton = new tCloseButton();
 	CloseButton->setObjectName("floatingTitleCloseButton");
-    CloseButton->setAutoRaise(true);
+
+	MinimizeButton = new tMinimizeButton();
+	MinimizeButton->setObjectName("floatingTitleMinimizeButton");
 
 	MaximizeButton = new tMaximizeButton();
 	MaximizeButton->setObjectName("floatingTitleMaximizeButton");
-	MaximizeButton->setAutoRaise(true);
 
 	// The standard icons do does not look good on high DPI screens
 	QIcon CloseIcon;
@@ -106,6 +110,12 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 	CloseButton->setFocusPolicy(Qt::NoFocus);
 	_this->connect(CloseButton, SIGNAL(clicked()), SIGNAL(closeRequested()));
 
+	MinimizeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	MinimizeButton->setVisible(true);
+	MinimizeButton->setFocusPolicy(Qt::NoFocus);
+	_this->connect(MinimizeButton, &QPushButton::clicked, _this, &CFloatingWidgetTitleBar::minimizeRequested);
+	MinimizeButton->setIcon(MinimizeIcon);
+
 	_this->setMaximizedIcon(false);
 	MaximizeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	MaximizeButton->setVisible(true);
@@ -117,11 +127,12 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 
 	// Fill the layout
 	QBoxLayout *Layout = new QBoxLayout(QBoxLayout::LeftToRight);
-	Layout->setContentsMargins(6, 0, 0, 0);
+	Layout->setContentsMargins(0, 0, 0, 0);
 	Layout->setSpacing(0);
 	_this->setLayout(Layout);
 	Layout->addWidget(TitleLabel, 1);
 	Layout->addSpacing(Spacing);
+	Layout->addWidget(MinimizeButton);
     Layout->addWidget(MaximizeButton);
 	Layout->addWidget(CloseButton);
 	Layout->setAlignment(Qt::AlignCenter);
@@ -145,6 +156,11 @@ CFloatingWidgetTitleBar::CFloatingWidgetTitleBar(CFloatingDockContainer *parent)
     d->MaximizeIcon.addPixmap(maxPixmap, QIcon::Normal);
     d->MaximizeIcon.addPixmap(internal::createTransparentPixmap(maxPixmap, 0.25), QIcon::Disabled);
     setMaximizedIcon(d->Maximized);
+
+    auto minPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarMinButton, 0, d->MinimizeButton);
+    d->MinimizeIcon.addPixmap(minPixmap, QIcon::Normal);
+    d->MinimizeIcon.addPixmap(internal::createTransparentPixmap(minPixmap, 0.25), QIcon::Disabled);
+    setMinimizeIcon(d->MinimizeIcon);
 }
 
 //============================================================================
@@ -211,6 +227,13 @@ void CFloatingWidgetTitleBar::setMaximizedIcon(bool maximized)
 }
 
 //============================================================================
+void CFloatingWidgetTitleBar::setMinimizeIcon(const QIcon& Icon)
+{
+    d->MinimizeIcon = Icon;
+    d->MinimizeButton->setIcon(d->MinimizeIcon);
+}
+
+//============================================================================
 void CFloatingWidgetTitleBar::setMaximizeIcon(const QIcon& Icon)
 {
     d->MaximizeIcon = Icon;
@@ -228,6 +251,12 @@ void CFloatingWidgetTitleBar::setNormalIcon(const QIcon& Icon)
     {
         setMaximizedIcon(d->Maximized);
     }
+}
+
+//============================================================================
+QIcon CFloatingWidgetTitleBar::minimizeIcon() const
+{
+    return d->MinimizeIcon;
 }
 
 //============================================================================
