@@ -36,7 +36,7 @@ HEADERS += \
     DockContainerWidget.h \
     DockManager.h \
     DockWidget.h \
-    DockWidgetTab.h \ 
+    DockWidgetTab.h \
     DockingStateReader.h \
     FloatingDockContainer.h \
     FloatingDragPreview.h \
@@ -80,11 +80,13 @@ SOURCES += \
     ResizeHandle.cpp
 
 
-unix:!macx {
+!macx {
 HEADERS += linux/FloatingWidgetTitleBar.h
 SOURCES += linux/FloatingWidgetTitleBar.cpp
-LIBS += -lxcb
 QT += gui-private
+}
+unix:!macx {
+LIBS += -lxcb
 }
 
 isEmpty(PREFIX){

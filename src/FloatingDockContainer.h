@@ -33,7 +33,7 @@
 
 #include <QRubberBand>
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 #include <QDockWidget>
 #define tFloatingWidgetBase QDockWidget
 #else
@@ -269,7 +269,7 @@ public:
 	 */
 	void hideAndDeleteLater();
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
     /**
 	 * This is a function that responds to FloatingWidgetTitleBar::maximizeRequest()
 	 * Maximize or normalize the container size.
@@ -280,7 +280,6 @@ public:
 	 * This is a function that responds to FloatingWidgetTitleBar::minimizeRequest()
      */
     void onMinimizeRequest();
-
 	/**
 	 * Normalize (Unmaximize) the window.
 	 *	fixGeometry parameter fixes a "bug" in QT where immediately after calling showNormal
@@ -300,15 +299,16 @@ public:
 	bool isMaximized() const;
 
 	/**
-	 * Patched show to prevent the window from appearing in the taskbar.
-	 */
-	void show();
-
-	/**
 	 * Returns true if the floating widget has a native titlebar or false if
 	 * the floating widget has a QWidget based title bar
 	 */
 	bool hasNativeTitleBar();
+#endif
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+	/**
+	 * Patched show to prevent the window from appearing in the taskbar.
+	 */
+	void show();
 #endif
 }; // class FloatingDockContainer
 }

@@ -27,7 +27,7 @@
 #include "DockManager.h"
 #include "DockAreaTitleBar.h"
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 #include "linux/FloatingWidgetTitleBar.h"
 #endif
 
@@ -84,7 +84,7 @@ static void updateDockAreaFocusStyle(CDockAreaWidget* DockArea, bool Focused)
 
 
 //===========================================================================
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 static void updateFloatingWidgetFocusStyle(CFloatingDockContainer* FloatingWidget, bool Focused)
 {
 	if (FloatingWidget->hasNativeTitleBar())

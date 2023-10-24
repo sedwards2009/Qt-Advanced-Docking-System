@@ -48,12 +48,15 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+#include <uxtheme.h>
 #ifdef _MSC_VER
 #pragma comment(lib, "User32.lib")
 #endif
 #endif
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 #include "linux/FloatingWidgetTitleBar.h"
+#endif
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 #include <xcb/xcb.h>
 #endif
 
@@ -382,8 +385,10 @@ struct FloatingDockContainerPrivate
 	bool AutoHideChildren = true;
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
     QWidget* MouseEventHandler = nullptr;
-    CFloatingWidgetTitleBar* TitleBar = nullptr;
 	bool IsResizing = false;
+#endif
+#if !defined(Q_OS_MACOS)
+    CFloatingWidgetTitleBar* TitleBar = nullptr;
 #endif
 
 	/**
@@ -674,7 +679,7 @@ void CFloatingDockContainer::init()
 		min_max_button_hint = Qt::WindowMinMaxButtonsHint;
 	}
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 	QDockWidget::setWidget(d->DockContainer);
 	QDockWidget::setFloating(true);
 	QDockWidget::setFeatures(QDockWidget::DockWidgetClosable
@@ -700,6 +705,7 @@ void CFloatingDockContainer::init()
 	{
 		native_window = false;
 	}
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 	else
 	{
 		// KDE doesn't seem to fire MoveEvents while moving windows, so for now no native titlebar for everything using KWin.
@@ -717,7 +723,7 @@ void CFloatingDockContainer::init()
             native_window = false;
         }
     }
-
+#endif
 	if (native_window)
 	{
 		setTitleBarWidget(new QWidget());
@@ -1321,7 +1327,7 @@ void CFloatingDockContainer::moveEvent(QMoveEvent *event)
 #endif
 
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 //============================================================================
 void CFloatingDockContainer::onMaximizeRequest()
 {
@@ -1379,7 +1385,14 @@ bool CFloatingDockContainer::isMaximized() const
 	return windowState() == Qt::WindowMaximized;
 }
 
+//============================================================================
+bool CFloatingDockContainer::hasNativeTitleBar()
+{
+	return d->TitleBar == nullptr;
+}
+#endif
 
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 //============================================================================
 void CFloatingDockContainer::show()
 {
@@ -1436,11 +1449,6 @@ bool CFloatingDockContainer::event(QEvent *e)
 	return result;
 }
 
-//============================================================================
-bool CFloatingDockContainer::hasNativeTitleBar()
-{
-	return d->TitleBar == nullptr;
-}
 #endif
 
 } // namespace ads
