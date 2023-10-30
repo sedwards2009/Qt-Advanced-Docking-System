@@ -435,7 +435,7 @@ struct FloatingDockContainerPrivate
 
 	void setWindowTitle(const QString &Text)
 	{
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+#if !defined(Q_OS_MACOS)
 		if (TitleBar)
 		{
 			TitleBar->setTitle(Text);
