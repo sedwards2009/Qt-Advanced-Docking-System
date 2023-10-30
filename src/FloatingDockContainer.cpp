@@ -731,7 +731,8 @@ void CFloatingDockContainer::init()
 	}
 	else
 	{
-		d->TitleBar = new CFloatingWidgetTitleBar(this);
+		bool showTitle = CDockManager::testConfigFlag(CDockManager::FloatingContainerShowWidgetTitle);
+		d->TitleBar = new CFloatingWidgetTitleBar(this, showTitle);
 		setTitleBarWidget(d->TitleBar);
 		setWindowFlags(Qt::Window | Qt::WindowMinMaxButtonsHint | Qt::FramelessWindowHint);
 		d->TitleBar->enableCloseButton(isClosable());

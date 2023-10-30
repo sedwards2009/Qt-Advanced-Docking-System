@@ -68,7 +68,7 @@ protected:
 
 public:
 	using Super = QWidget;
-	explicit CFloatingWidgetTitleBar(CFloatingDockContainer *parent = nullptr);
+	explicit CFloatingWidgetTitleBar(CFloatingDockContainer *parent = nullptr, bool showTitle = true);
 
 	/**
 	 * Virtual Destructor

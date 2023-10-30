@@ -75,11 +75,11 @@ struct FloatingWidgetTitleBarPrivate
 	/**
 	 * Creates the complete layout including all controls
 	 */
-	void createLayout();
+	void createLayout(bool showTitle);
 };
 
 //============================================================================
-void FloatingWidgetTitleBarPrivate::createLayout()
+void FloatingWidgetTitleBarPrivate::createLayout(bool showTitle)
 {
 	TitleLabel = new tTabLabel();
 	TitleLabel->setElideMode(Qt::ElideRight);
@@ -130,23 +130,30 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 	Layout->setContentsMargins(0, 0, 0, 0);
 	Layout->setSpacing(0);
 	_this->setLayout(Layout);
-	Layout->addWidget(TitleLabel, 1);
-	Layout->addSpacing(Spacing);
+	if (showTitle)
+	{
+		Layout->addWidget(TitleLabel, 1);
+		Layout->addSpacing(Spacing);
+	}
+	else
+	{
+		Layout->addStretch(1);
+	}
 	Layout->addWidget(MinimizeButton);
     Layout->addWidget(MaximizeButton);
 	Layout->addWidget(CloseButton);
 	Layout->setAlignment(Qt::AlignCenter);
 
-	TitleLabel->setVisible(true);
+	TitleLabel->setVisible(showTitle);
 }
 
 //============================================================================
-CFloatingWidgetTitleBar::CFloatingWidgetTitleBar(CFloatingDockContainer *parent) :
+CFloatingWidgetTitleBar::CFloatingWidgetTitleBar(CFloatingDockContainer *parent, bool showTitle) :
     QFrame(parent),
 	d(new FloatingWidgetTitleBarPrivate(this))
 {
 	d->FloatingWidget = parent;
-	d->createLayout();
+	d->createLayout(showTitle);
 
     auto normalPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarNormalButton, 0, d->MaximizeButton);
     d->NormalIcon.addPixmap(normalPixmap, QIcon::Normal);

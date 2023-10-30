@@ -219,6 +219,7 @@ public:
 
 		DockWidgetTabContextMenu = 0x8000000,	//! Show context menu on tabs
 		DockWidgetTabTitle = 0x10000000,		//! Show the tab label text
+		FloatingContainerShowWidgetTitle = 0x20000000,		//! Show the title in a custom title bar
 
         DefaultDockAreaButtons = DockAreaHasCloseButton
 							   | DockAreaHasUndockButton
