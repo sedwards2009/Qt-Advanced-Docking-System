@@ -42,7 +42,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QApplication>
-#include <qpa/qplatformnativeinterface.h>
+#include <6.10.2/QtGui/qpa/qplatformnativeinterface.h>
 #endif
 
 namespace ads
